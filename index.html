@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Check-in Greco Cycle · América Greco</title>
+<meta name="description" content="Garanta sua bike na aula de spinning da América Greco. Check-in rápido com nome, CPF e horário.">
+<meta name="theme-color" content="#2C1F14">
+<link rel="icon" href="https://americagreco.com.br/favicon.png">
+<link rel="apple-touch-icon" href="https://americagreco.com.br/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,600;1,700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<script>document.documentElement.classList.remove('no-js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('reduced')</script>
+</head>
+<body>
+
+<header class="top">
+  <div class="container">
+    <a href="https://americagreco.com.br" aria-label="América Greco — site"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></a>
+    <span class="tag">Greco Cycle · Check-in</span>
+  </div>
+</header>
+
+<section class="hero grain">
+  <div class="hero-bg" style="background-image:url('https://americagreco.com.br/assets/ecb8cd76-65f6-4bdc-9498-a03e0dd1b45c_1787097242430-B7puRCLG.webp')"></div>
+  <div class="hero-shade"></div>
+  <canvas id="wheel" aria-hidden="true"></canvas>
+  <div class="container hero-inner">
+    <div class="eyebrow hero-el">Greco Cycle · Spinning</div>
+    <h1 id="heroTitle">Sua bike <b>garantida</b> antes da aula</h1>
+    <p class="hero-el">Vagas limitadas por turma. Faça seu check-in em menos de um minuto e chegue sabendo que a sua bike está te esperando.</p>
+    <div class="hero-actions hero-el">
+      <a href="#checkin" class="btn btn-gold" data-scroll>Fazer check-in
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="#consulta" class="btn btn-ghost" data-scroll>Meus check-ins</a>
+    </div>
+    <div class="hero-meta hero-el">
+      <div><strong id="mTurmas">—</strong>turmas hoje</div>
+      <div><strong id="mLivres">—</strong>bikes livres</div>
+      <div><strong>1 min</strong>para garantir</div>
+    </div>
+  </div>
+</section>
+
+<main>
+  <section class="section" id="checkin">
+    <div class="container checkin-grid">
+      <div class="intro reveal">
+        <div class="eyebrow">Check-in de aula</div>
+        <h2>Pedale sem <b>surpresas</b>.</h2>
+        <p>Cada turma tem um número fixo de bikes. Quem faz check-in garante o lugar — simples assim, sem fila e sem disputa na porta da sala.</p>
+        <ol class="steps">
+          <li><span class="n">01</span><div><h4>Escolha o dia</h4><p>Hoje ou nos próximos dias liberados.</p></div></li>
+          <li><span class="n">02</span><div><h4>Selecione o horário</h4><p>Veja em tempo real quantas bikes ainda estão livres.</p></div></li>
+          <li><span class="n">03</span><div><h4>Confirme com seu CPF</h4><p>Apresente o código na recepção ao chegar.</p></div></li>
+        </ol>
+        <p class="rules">Um check-in por CPF por dia. Não vai conseguir ir? Cancele em “Meus check-ins” e libere a bike para outro aluno.</p>
+      </div>
+
+      <form class="card reveal" id="form" novalidate>
+        <div class="card-head">
+          <div><div class="eyebrow">Greco Cycle</div><h3>Reserve sua bike</h3></div>
+          <span class="live"><i></i>Ao vivo</span>
+        </div>
+
+        <div class="block">
+          <div class="step-label"><span>01</span>Dia</div>
+          <div class="days" id="days"></div>
+        </div>
+
+        <div class="block">
+          <div class="step-label"><span>02</span>Horário</div>
+          <div class="slots" id="slots"><div class="empty">Carregando turmas…</div></div>
+        </div>
+
+        <div class="block">
+          <div class="step-label"><span>03</span>Seus dados</div>
+          <div class="fields">
+            <div class="field"><input id="nome" autocomplete="name" placeholder=" " maxlength="120" required><label for="nome">Nome completo</label></div>
+            <div class="field"><input id="cpf" inputmode="numeric" autocomplete="off" placeholder=" " maxlength="14" required><label for="cpf">CPF</label></div>
+          </div>
+        </div>
+
+        <div class="summary">
+          <div class="sel" id="sel">Escolha um horário para continuar</div>
+          <button class="btn btn-dark" id="go" type="submit" disabled>Confirmar check-in
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="msg" id="msg"></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="consulta" style="padding-bottom:40px">
+    <div class="container">
+      <div class="lookup grain reveal">
+        <div>
+          <div class="eyebrow">Meus check-ins</div>
+          <h3>Mudou de planos? <b>Libere a bike.</b></h3>
+          <p>Digite seu CPF para ver seus check-ins e cancelar se não puder comparecer.</p>
+        </div>
+        <div>
+          <form class="lookup-form" id="lookup">
+            <input id="cpf2" inputmode="numeric" placeholder="Seu CPF" maxlength="14" aria-label="CPF">
+            <button class="btn btn-gold" type="submit">Consultar</button>
+          </form>
+          <div class="mine" id="mine"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="foot">
+      <div>
+        <span class="logo-wrap"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></span>
+        <p>Onde o esforço encontra o luxo, e a disciplina forja campeões.</p>
+      </div>
+      <div>
+        <h5>Endereço</h5>
+        <ul><li>Rua Araçazeiro, 1308</li><li>Paraviana · Boa Vista, RR</li></ul>
+      </div>
+      <div>
+        <h5>Contato</h5>
+        <ul>
+          <li><a href="https://www.instagram.com/americagreco_/" target="_blank" rel="noopener">@americagreco_</a></li>
+          <li><a href="https://americagreco.com.br" target="_blank" rel="noopener">americagreco.com.br</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© <span id="yr"></span> América Greco · <a href="/admin">Gestão</a></span>
+      <span>Desenvolvido por Vendora Labs</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="tkTitle">
+  <div class="ticket" id="ticket">
+    <div class="ticket-top">
+      <img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="">
+      <div class="eyebrow">Check-in confirmado</div>
+      <h3 id="tkTitle">Bike garantida, <span id="tkNome"></span>.</h3>
+    </div>
+    <div class="ticket-cut"><i></i></div>
+    <div class="ticket-body">
+      <div class="ticket-row">
+        <div><small>Dia</small><strong id="tkDia"></strong></div>
+        <div><small>Horário</small><strong id="tkHora"></strong></div>
+      </div>
+      <div class="code" id="tkCode"></div>
+      <p class="note" id="tkNote"></p>
+      <button class="btn btn-dark" id="tkClose" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollToPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="/assets/config.js"></script>
+<script src="/assets/api.js"></script>
+<script src="/assets/app.js"></script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+<script type="module" src="/assets/wheel.js"></script>
+</body>
+</html>

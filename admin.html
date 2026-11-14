@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gestão Greco Cycle · América Greco</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2C1F14">
+<link rel="icon" href="https://americagreco.com.br/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/admin.css">
+</head>
+<body class="adm">
+
+<!-- LOGIN -->
+<section class="login grain" id="login">
+  <div class="login-bg" style="background-image:url('https://americagreco.com.br/assets/0daeec1c-bf39-4e77-bb64-9b4665b2b709_1787097242430-PWX2hEtK.webp')"></div>
+  <form class="login-card" id="loginForm">
+    <span class="logo-dark"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></span>
+    <div class="eyebrow">Área restrita</div>
+    <h1>Gestão <b>Greco Cycle</b></h1>
+    <p>Acompanhe os check-ins das aulas de spinning, confirme presenças e organize as turmas.</p>
+    <div class="field"><input type="password" id="senha" placeholder=" " autocomplete="current-password" required><label for="senha">Senha de acesso</label></div>
+    <button class="btn btn-dark" type="submit" style="width:100%">Entrar</button>
+    <div class="msg" id="loginMsg"></div>
+  </form>
+</section>
+
+<!-- PAINEL -->
+<div class="app" id="app" hidden>
+  <header class="bar">
+    <div class="bar-l">
+      <span class="logo-dark sm"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></span>
+      <div><div class="eyebrow">Painel</div><strong>Greco Cycle</strong></div>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="on" data-tab="dia">Turmas</button>
+      <button data-tab="horarios">Horários</button>
+      <button data-tab="relatorio">Relatório</button>
+      <button data-tab="config">Ajustes</button>
+    </nav>
+    <button class="btn btn-line sm" id="sair">Sair</button>
+  </header>
+
+  <!-- TURMAS DO DIA -->
+  <section class="pane" id="pane-dia">
+    <div class="pane-head">
+      <div>
+        <div class="eyebrow" id="diaRot">Hoje</div>
+        <h2 id="diaTitulo">—</h2>
+      </div>
+      <div class="datebar">
+        <button class="ic" id="prev" aria-label="Dia anterior">‹</button>
+        <input type="date" id="data">
+        <button class="ic" id="next" aria-label="Próximo dia">›</button>
+        <button class="btn btn-line sm" id="hoje">Hoje</button>
+      </div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><small>Check-ins</small><strong id="kTotal">0</strong></div>
+      <div class="kpi"><small>Presentes</small><strong id="kPres">0</strong></div>
+      <div class="kpi"><small>Faltas</small><strong id="kFalta">0</strong></div>
+      <div class="kpi dark"><small>Ocupação</small><strong id="kOcup">0%</strong></div>
+    </div>
+
+    <div class="search"><input id="busca" placeholder="Buscar aluno por nome ou CPF…"></div>
+    <div class="turmas" id="turmas"></div>
+    <p class="refresh">Atualiza sozinho a cada 20 segundos · <span id="upd"></span></p>
+  </section>
+
+  <!-- HORÁRIOS -->
+  <section class="pane" id="pane-horarios" hidden>
+    <div class="pane-head">
+      <div><div class="eyebrow">Configuração</div><h2>Horários & bikes</h2></div>
+      <button class="btn btn-dark sm" id="novoHorario">+ Novo horário</button>
+    </div>
+    <p class="hint">Defina quando acontecem as aulas e quantas bikes cada turma tem. O check-in fecha sozinho quando lota ou quando a aula começa.</p>
+    <div class="hlist" id="hlist"></div>
+  </section>
+
+  <!-- RELATÓRIO -->
+  <section class="pane" id="pane-relatorio" hidden>
+    <div class="pane-head">
+      <div><div class="eyebrow">Histórico</div><h2>Relatório</h2></div>
+      <div class="datebar">
+        <input type="date" id="rIni"><span class="ate">até</span><input type="date" id="rFim">
+        <button class="btn btn-dark sm" id="rGo">Gerar</button>
+        <button class="btn btn-line sm" id="rCsv" disabled>Baixar planilha</button>
+      </div>
+    </div>
+    <div class="kpis" id="rKpis"></div>
+    <div class="table-wrap"><table class="tbl" id="rTbl"></table></div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section class="pane" id="pane-config" hidden>
+    <div class="pane-head"><div><div class="eyebrow">Preferências</div><h2>Ajustes</h2></div></div>
+    <div class="cfg-grid">
+      <form class="card" id="cfgAnt">
+        <h3 class="ct">Antecedência do check-in</h3>
+        <p class="hint">Quantos dias à frente o aluno pode reservar (0 = só no dia da aula).</p>
+        <div class="field"><input type="number" id="ant" min="0" max="14" placeholder=" "><label for="ant">Dias</label></div>
+        <button class="btn btn-dark" type="submit">Salvar</button>
+        <div class="msg" id="antMsg"></div>
+      </form>
+      <form class="card" id="cfgSenha">
+        <h3 class="ct">Trocar senha</h3>
+        <p class="hint">Use uma senha só sua, com pelo menos 6 caracteres.</p>
+        <div class="field"><input type="password" id="nova" placeholder=" " autocomplete="new-password"><label for="nova">Nova senha</label></div>
+        <div class="field"><input type="password" id="nova2" placeholder=" " autocomplete="new-password"><label for="nova2">Repita a nova senha</label></div>
+        <button class="btn btn-dark" type="submit">Trocar senha</button>
+        <div class="msg" id="senhaMsg"></div>
+      </form>
+      <div class="card">
+        <h3 class="ct">Link para os alunos</h3>
+        <p class="hint">Coloque na bio do Instagram, no grupo de WhatsApp ou num QR code na recepção.</p>
+        <div class="linkbox"><code id="pubLink"></code><button class="btn btn-gold sm" id="copiar" type="button">Copiar</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- modal horário -->
+<div class="overlay" id="hModal">
+  <form class="card modal" id="hForm">
+    <h3 class="ct" id="hTitulo">Novo horário</h3>
+    <div class="fields">
+      <div class="field"><input type="time" id="hHora" required placeholder=" "><label for="hHora">Horário</label></div>
+      <div class="field"><input type="number" id="hVagas" min="1" max="200" required placeholder=" "><label for="hVagas">Bikes</label></div>
+    </div>
+    <div class="field" style="margin-top:12px"><input id="hInstr" placeholder=" " maxlength="60"><label for="hInstr">Instrutor (opcional)</label></div>
+    <div class="dsel" id="hDias"></div>
+    <label class="tgl"><input type="checkbox" id="hAtivo" checked> <span>Turma ativa (aparece para os alunos)</span></label>
+    <div class="modal-actions">
+      <button class="btn btn-line" type="button" id="hExcluir">Excluir</button>
+      <span style="flex:1"></span>
+      <button class="btn btn-line" type="button" id="hCancel">Cancelar</button>
+      <button class="btn btn-dark" type="submit">Salvar</button>
+    </div>
+    <div class="msg" id="hMsg"></div>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+<script src="/assets/config.js"></script>
+<script src="/assets/api.js"></script>
+<script src="/assets/admin.js"></script>
+</body>
+</html>
