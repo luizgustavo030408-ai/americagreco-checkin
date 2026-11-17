@@ -49,12 +49,21 @@
   // ---------- formulário (cadastrar / editar) ----------
   function limparForm() {
     st.editId = null;
-    const ult = JSON.parse(LS.get('gc_ult') || '{"hora":"19:00","alunos":12,"externos":10}');
+    const ult = JSON.parse(LS.get('gc_ult') || '{"hora":"19:00","alunos":2,"externos":10}');
     $('#fData').value = ''; $('#fData').min = U.hoje();
     $('#fHora').value = ult.hora; $('#fAlunos').value = ult.alunos; $('#fExternos').value = ult.externos;
     $('#formTitulo').textContent = 'Cadastrar aula'; $('#fBotao').textContent = 'Cadastrar aula';
-    $('#fCancelar').hidden = true; $('#fErro').textContent = '';
+    $('#fCancelar').hidden = true; $('#fErro').textContent = ''; mostrarTotal();
   }
+  const MAX = 12;
+  function mostrarTotal() {
+    const t = (parseInt($('#fAlunos').value, 10) || 0) + (parseInt($('#fExternos').value, 10) || 0);
+    const el = $('#fTotal');
+    el.className = 'total' + (t > MAX ? ' erro-total' : '');
+    el.innerHTML = t > MAX ? `<b>${t} bikes</b> — passa do limite de ${MAX}. Diminua as vagas.` : `Total: <b>${t} de ${MAX} bikes</b>`;
+    $('#fBotao').disabled = t > MAX || t === 0;
+  }
+  ['#fAlunos', '#fExternos'].forEach(i => $(i).addEventListener('input', mostrarTotal));
   $('#fCancelar').addEventListener('click', limparForm);
 
   $('#form').addEventListener('submit', async e => {
@@ -65,17 +74,17 @@
     if (!st.editId && d.data < U.hoje()) return $('#fErro').textContent = 'Esse dia já passou.';
     if (isNaN(d.alunos) || isNaN(d.externos) || d.alunos < 0 || d.externos < 0) return $('#fErro').textContent = 'Preencha as vagas (pode ser 0).';
     if (d.alunos + d.externos === 0) return $('#fErro').textContent = 'A aula precisa ter pelo menos 1 vaga.';
+    if (d.alunos + d.externos > MAX) return $('#fErro').textContent = `São no máximo ${MAX} bikes por aula (alunos + externos).`;
     const b = $('#fBotao'); b.disabled = true;
     try {
-      const r = await call('spin_admin_aula_salvar', { p_id: st.editId, p_data: d.data, p_hora: d.hora, p_titulo: 'Aula Spinning',
-        p_vagas_aluno: d.alunos, p_vagas_externo: d.externos, p_valor: 0, p_instrutor: '', p_obs: '', p_repetir_semanas: 1 });
+      const r = await call('spin_admin_aula_salvar', { p_id: st.editId, p_data: d.data, p_hora: d.hora,
+        p_vagas_total: d.alunos + d.externos, p_vagas_aluno: d.alunos, p_vagas_externo: d.externos });
       if (!r.ok) return $('#fErro').textContent = r.erro;
-      if (!st.editId && !r.criadas) return $('#fErro').textContent = 'Já existe uma aula nesse dia e horário.';
       LS.set('gc_ult', JSON.stringify({ hora: d.hora, alunos: d.alunos, externos: d.externos }));
       avisar(st.editId ? 'Aula atualizada.' : 'Aula cadastrada! Já está no site.', true);
       limparForm(); await carregar();
     } catch (err) { $('#fErro').textContent = err.message; }
-    finally { b.disabled = false; }
+    finally { mostrarTotal(); }
   });
 
   // ---------- lista de aulas ----------
@@ -106,12 +115,13 @@
       return;
     }
     el.innerHTML = lista.map(a => {
-      const aberto = st.abertos.has(a.id), inscritos = a.ocup_aluno + a.ocup_externo;
+      const aberto = st.abertos.has(a.id), inscritos = a.ocup_aluno + a.ocup_externo, lotada = inscritos >= a.vagas_total;
       const caixa = (rot, o, v) => `<div class="${v > 0 && o >= v ? 'cheio' : ''}"><small>${rot}</small><b>${o}/${v}</b> <em>${v > 0 && o >= v ? 'lotado' : (v - o) + ' livres'}</em></div>`;
       return `<div class="aula ${passou || a.encerrada ? 'passou' : ''}">
         <div class="a-topo">
           <div class="a-data"><small>${U.semana[U.dow(a.data)]}</small><b>${U.dataBR(a.data)}</b></div>
           <div class="a-info"><b>${a.hora}</b><span>${U.dataLonga(a.data)}${a.encerrada && !passou ? ' · já começou' : ''}</span></div>
+          <div class="a-bikes ${lotada ? 'cheio' : ''}"><b>${inscritos}/${a.vagas_total}</b><small>${lotada ? 'lotada' : 'bikes'}</small></div>
         </div>
         <div class="contagem">${caixa('Alunos', a.ocup_aluno, a.vagas_aluno)}${caixa('Externos', a.ocup_externo, a.vagas_externo)}</div>
         <div class="a-botoes">
@@ -155,7 +165,7 @@
       $('#fData').value = a.data; $('#fData').min = ''; $('#fHora').value = a.hora;
       $('#fAlunos').value = a.vagas_aluno; $('#fExternos').value = a.vagas_externo;
       $('#formTitulo').textContent = `Editar aula de ${U.dataBR(a.data)}`; $('#fBotao').textContent = 'Salvar alterações';
-      $('#fCancelar').hidden = false; $('#fErro').textContent = '';
+      $('#fCancelar').hidden = false; $('#fErro').textContent = ''; mostrarTotal();
       $('#form').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -177,7 +187,7 @@
     if (b.dataset.copiar) {
       const a = acharAula(+b.dataset.copiar), l = ativos(a.id);
       const nomes = t => l.filter(p => p.tipo === t).map((p, i) => `${i + 1}. ${p.nome}`).join('\n') || '—';
-      const txt = `🚴 Spinning — ${U.dataLonga(a.data)} às ${a.hora}\n\nAlunos (${a.ocup_aluno}/${a.vagas_aluno}):\n${nomes('aluno')}\n\nExternos (${a.ocup_externo}/${a.vagas_externo}):\n${nomes('externo')}`;
+      const txt = `🚴 Spinning — ${U.dataLonga(a.data)} às ${a.hora} (${l.length}/${a.vagas_total} bikes)\n\nAlunos (${a.ocup_aluno}/${a.vagas_aluno}):\n${nomes('aluno')}\n\nExternos (${a.ocup_externo}/${a.vagas_externo}):\n${nomes('externo')}`;
       try { await navigator.clipboard.writeText(txt); avisar('Lista copiada! Cole no WhatsApp.', true); } catch { prompt('Copie a lista:', txt); }
     }
   });

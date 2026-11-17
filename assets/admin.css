@@ -96,3 +96,10 @@ input:focus{outline:2px solid var(--ouro);outline-offset:1px;border-color:var(--
 input[type=date],input[type=time]{display:block;max-width:100%}
 html,body{overflow-x:hidden}
 @media (max-width:380px){#form .linha:first-of-type{grid-template-columns:1fr}}
+.total{text-align:center;font-size:14px;color:var(--tinta2);background:var(--bg);border-radius:12px;padding:10px}
+.total b{color:var(--tinta)}
+.total.erro-total{background:rgba(180,71,46,.1);color:var(--verm)}.total.erro-total b{color:var(--verm)}
+.a-bikes{text-align:center;padding:6px 10px;border-radius:12px;background:var(--bg);min-width:62px}
+.a-bikes b{display:block;font-size:20px;line-height:1.1}
+.a-bikes small{font-size:11px;color:var(--cinza);font-weight:600}
+.a-bikes.cheio{background:rgba(180,71,46,.1)}.a-bikes.cheio b,.a-bikes.cheio small{color:var(--verm)}

@@ -44,9 +44,10 @@
         <label>Horário<input type="time" id="fHora" required></label>
       </div>
       <div class="linha">
-        <label>Vagas para alunos<input type="number" id="fAlunos" min="0" max="200" inputmode="numeric" required></label>
-        <label>Vagas para externos<input type="number" id="fExternos" min="0" max="200" inputmode="numeric" required></label>
+        <label>Vagas para alunos<input type="number" id="fAlunos" min="0" max="12" inputmode="numeric" required></label>
+        <label>Vagas para externos<input type="number" id="fExternos" min="0" max="12" inputmode="numeric" required></label>
       </div>
+      <p class="total" id="fTotal"></p>
       <button class="btn" type="submit" id="fBotao">Cadastrar aula</button>
       <button class="link" type="button" id="fCancelar" hidden>Cancelar edição</button>
       <p class="erro" id="fErro"></p>

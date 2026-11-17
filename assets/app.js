@@ -7,11 +7,12 @@
     try { st.aulas = await API.rpc('spin_aulas_abertas'); }
     catch { $('#aulas').innerHTML = `<div class="empty">Não foi possível carregar as aulas agora. Atualize a página.</div>`; return; }
     if (st.aula) st.aula = st.aulas.find(a => a.aula_id === st.aula.aula_id) || null;
-    if (!st.aula) st.aula = st.aulas.find(a => !a.encerrada && livres(a, 'aluno') + livres(a, 'externo') > 0) || null;
+    if (!st.aula) st.aula = st.aulas.find(a => !a.encerrada && livresTotal(a) > 0) || null;
     if (st.aula && st.tipo && livres(st.aula, st.tipo) === 0) st.tipo = null;
     render();
   }
-  const livres = (a, t) => Math.max(0, t === 'aluno' ? a.vagas_aluno - a.ocup_aluno : a.vagas_externo - a.ocup_externo);
+  const livresTotal = a => Math.max(0, a.vagas_total - a.ocup_aluno - a.ocup_externo);
+  const livres = (a, t) => Math.min(livresTotal(a), Math.max(0, t === 'aluno' ? a.vagas_aluno - a.ocup_aluno : a.vagas_externo - a.ocup_externo));
 
   function render() {
     const el = $('#aulas');
@@ -19,7 +20,7 @@
       el.innerHTML = `<div class="empty">Nenhuma aula de spinning aberta no momento.<br>Fique de olho no Instagram <a href="https://www.instagram.com/americagreco_/" target="_blank" rel="noopener">@americagreco_</a>.</div>`;
     } else {
       el.innerHTML = st.aulas.map(a => {
-        const tot = livres(a, 'aluno') + livres(a, 'externo');
+        const tot = livresTotal(a);
         const off = a.encerrada || tot === 0;
         const on = st.aula && st.aula.aula_id === a.aula_id;
         return `<button type="button" class="aula ${on ? 'on' : ''} ${off ? 'off' : ''}" data-id="${a.aula_id}" ${off ? 'disabled' : ''}>
@@ -37,7 +38,7 @@
       b.disabled = !a || l === 0;
       b.classList.toggle('on', st.tipo === t);
       b.classList.toggle('low', !!a && l > 0 && l <= 3);
-      $(t === 'aluno' ? '#vAluno' : '#vExterno').textContent = !a ? '—' : total === 0 ? 'Sem vagas nesta aula' : l === 0 ? 'Esgotado' : `${l} de ${total} vagas livres`;
+      $(t === 'aluno' ? '#vAluno' : '#vExterno').textContent = !a ? '—' : total === 0 ? 'Sem vagas nesta aula' : l === 0 ? 'Esgotado' : `${l} ${l === 1 ? 'vaga livre' : 'vagas livres'}`;
     });
     resumo();
   }
@@ -102,7 +103,7 @@
     $('#tkDia').textContent = r.data === U.hoje() ? 'Hoje' : U.dataBR(r.data);
     $('#tkHora').textContent = r.hora;
     $('#tkCode').textContent = r.codigo;
-    $('#tkNote').textContent = `${r.tipo === 'aluno' ? 'Vaga de aluno' : 'Vaga externa'} · ${r.posicao}º de ${r.vagas}. Mostre este código na recepção e chegue 5 min antes para ajustar a bike.`;
+    $('#tkNote').textContent = `${r.tipo === 'aluno' ? 'Vaga de aluno' : 'Vaga externa'} · bike ${r.bike} de ${r.vagas_total}. Mostre este código na recepção e chegue 5 min antes para ajustar a bike.`;
     $('#overlay').classList.add('show'); $('#tkClose').focus();
   }
   const fechar = () => $('#overlay').classList.remove('show');
