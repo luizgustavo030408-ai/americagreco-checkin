@@ -45,5 +45,13 @@ window.U = {
     const dv = n => { let s = 0; for (let i = 0; i < n; i++) s += +c[i] * (n + 1 - i); const r = (s * 10) % 11; return r === 10 ? 0 : r; };
     return dv(9) === +c[9] && dv(10) === +c[10];
   },
+  brl(v) { return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); },
+  maskTel(v) {
+    v = this.so(v).slice(0, 11);
+    if (v.length <= 2) return v ? '(' + v : '';
+    if (v.length <= 6) return `(${v.slice(0, 2)}) ${v.slice(2)}`;
+    if (v.length <= 10) return `(${v.slice(0, 2)}) ${v.slice(2, 6)}-${v.slice(6)}`;
+    return `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+  },
   esc(s) { return String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
 };

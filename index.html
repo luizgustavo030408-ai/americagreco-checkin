@@ -27,25 +27,35 @@
     </div>
 
     <div class="block">
-      <div class="step-label"><span>01</span>Dia</div>
-      <div class="days" id="days"></div>
+      <div class="step-label"><span>01</span>Aula</div>
+      <div class="aulas" id="aulas"><div class="empty">Carregando aulas…</div></div>
     </div>
 
     <div class="block">
-      <div class="step-label"><span>02</span>Horário</div>
-      <div class="slots" id="slots"><div class="empty">Carregando turmas…</div></div>
+      <div class="step-label"><span>02</span>Você é</div>
+      <div class="tipos" id="tipos">
+        <button type="button" class="tipo" data-t="aluno" disabled>
+          <span class="t-top"><strong>Aluno da academia</strong><em>Incluso no plano</em></span>
+          <span class="t-vagas" id="vAluno">—</span>
+        </button>
+        <button type="button" class="tipo" data-t="externo" disabled>
+          <span class="t-top"><strong>Externo · diária</strong><em id="vPreco">—</em></span>
+          <span class="t-vagas" id="vExterno">—</span>
+        </button>
+      </div>
     </div>
 
     <div class="block">
       <div class="step-label"><span>03</span>Seus dados</div>
       <div class="fields">
-        <div class="field"><input id="nome" autocomplete="name" placeholder=" " maxlength="120" required><label for="nome">Nome completo</label></div>
+        <div class="field full"><input id="nome" autocomplete="name" placeholder=" " maxlength="120" required><label for="nome">Nome completo</label></div>
         <div class="field"><input id="cpf" inputmode="numeric" autocomplete="off" placeholder=" " maxlength="14" required><label for="cpf">CPF</label></div>
+        <div class="field"><input id="tel" inputmode="tel" autocomplete="tel" placeholder=" " maxlength="15"><label for="tel">WhatsApp</label></div>
       </div>
     </div>
 
     <div class="summary">
-      <div class="sel" id="sel">Escolha um horário para continuar</div>
+      <div class="sel" id="sel">Escolha a aula para continuar</div>
       <button class="btn btn-dark" id="go" type="submit" disabled>Confirmar check-in</button>
     </div>
     <div class="msg" id="msg"></div>
@@ -60,7 +70,7 @@
     <div class="mine" id="mine"></div>
   </details>
 
-  <p class="foot-s">Um check-in por CPF por dia · Chegue 5 min antes · <a href="/admin">Gestão</a></p>
+  <p class="foot-s">Chegue 5 min antes para ajustar a bike · <a href="/admin">Gestão</a></p>
 </main>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="tkTitle">
@@ -77,6 +87,7 @@
         <div><small>Horário</small><strong id="tkHora"></strong></div>
       </div>
       <div class="code" id="tkCode"></div>
+      <div class="pay" id="tkPay"></div>
       <p class="note" id="tkNote"></p>
       <button class="btn btn-dark" id="tkClose" type="button">Fechar</button>
     </div>

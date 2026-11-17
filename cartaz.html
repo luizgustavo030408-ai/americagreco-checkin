@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartaz · Check-in Spinning · América Greco</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  @page{size:A4;margin:0}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#d9cfbf;font-family:Montserrat,sans-serif;color:#2C1F14;display:grid;place-items:center;min-height:100vh;padding:24px}
+  .a4{width:210mm;height:297mm;background:#F0E8DB;position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 60px -30px rgba(0,0,0,.5)}
+  .top{background:#2C1F14;color:#F0E8DB;padding:18mm 16mm 16mm;border-radius:0 0 14mm 14mm;text-align:center}
+  .top img{height:22mm;width:auto;margin:0 auto 10mm;display:block}
+  .eyebrow{font-size:10pt;letter-spacing:.32em;text-transform:uppercase;color:#C9A84C;font-weight:600}
+  h1{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:44pt;line-height:1;margin-top:5mm}
+  h1 b{font-weight:700;font-style:italic;color:#f3e4bd}
+  .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10mm 16mm;text-align:center}
+  .qr{background:#fff;padding:7mm;border-radius:10mm;box-shadow:0 16px 40px -20px rgba(44,31,20,.6)}
+  .qr img{width:88mm;height:88mm;display:block;image-rendering:pixelated}
+  .scan{font-family:"Cormorant Garamond",serif;font-size:28pt;font-weight:700;margin-top:9mm;line-height:1.1}
+  .url{font-size:12pt;margin-top:3mm;color:#4A3226;font-weight:500;letter-spacing:.02em}
+  .steps{display:flex;gap:6mm;justify-content:center;padding:0 14mm 16mm}
+  .step{flex:1;background:#F7F2EA;border-radius:6mm;padding:6mm 5mm;text-align:center;border:1px solid rgba(44,31,20,.1)}
+  .step b{display:block;font-family:"Cormorant Garamond",serif;font-size:24pt;color:#C9A84C;line-height:1}
+  .step span{display:block;font-size:10pt;margin-top:2mm;font-weight:500;line-height:1.35}
+  .foot{text-align:center;font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:#8B7043;padding-bottom:10mm}
+  .print{position:fixed;top:16px;right:16px;padding:14px 24px;border-radius:999px;border:0;background:#2C1F14;color:#F0E8DB;font:600 12px Montserrat;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
+  @media print{body{background:none;padding:0;display:block}.a4{box-shadow:none}.print{display:none}}
+  @media screen and (max-width:900px){.a4{transform:scale(.45);transform-origin:top center;margin-bottom:-160mm}}
+</style>
+</head>
+<body>
+<button class="print" onclick="print()">Imprimir</button>
+<div class="a4">
+  <div class="top">
+    <img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco">
+    <div class="eyebrow">Aula de Spinning</div>
+    <h1>Garanta sua <b>bike</b></h1>
+  </div>
+  <div class="mid">
+    <div class="qr"><img src="/assets/qr-checkin.png" alt="QR Code do check-in"></div>
+    <div class="scan">Aponte a câmera e faça seu check-in</div>
+    <div class="url">americagreco-checkin.vercel.app</div>
+  </div>
+  <div class="steps">
+    <div class="step"><b>1</b><span>Escolha a aula</span></div>
+    <div class="step"><b>2</b><span>Aluno da academia ou externo</span></div>
+    <div class="step"><b>3</b><span>Nome e CPF — pronto!</span></div>
+  </div>
+  <div class="foot">Vagas limitadas · Chegue 5 minutos antes</div>
+</div>
+</body>
+</html>
