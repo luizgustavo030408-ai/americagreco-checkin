@@ -9,211 +9,75 @@
 <link rel="icon" href="https://americagreco.com.br/favicon.png">
 <link rel="apple-touch-icon" href="https://americagreco.com.br/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/admin.css">
 </head>
-<body class="adm">
+<body>
 
-<!-- ============ LOGIN ============ -->
-<section class="login" id="login">
-  <form class="login-card" id="loginForm">
-    <span class="logo-dark"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></span>
-    <div class="eyebrow">Painel de gestão</div>
-    <h1>Aulas de <b>Spinning</b></h1>
-    <div class="field"><input id="lUser" autocomplete="username" autocapitalize="none" placeholder=" " required><label for="lUser">Usuário</label></div>
-    <div class="field"><input type="password" id="lPass" autocomplete="current-password" placeholder=" " required><label for="lPass">Senha</label></div>
-    <button class="btn btn-dark" type="submit">Entrar</button>
-    <div class="msg" id="loginMsg"></div>
+<!-- LOGIN -->
+<main class="login" id="login">
+  <form class="box" id="loginForm">
+    <div class="logo"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></div>
+    <h1>Painel do Spinning</h1>
+    <label>Usuário<input id="lUser" autocomplete="username" autocapitalize="none" required></label>
+    <label>Senha<input id="lPass" type="password" autocomplete="current-password" required></label>
+    <button class="btn" type="submit">Entrar</button>
+    <p class="erro" id="loginErro"></p>
   </form>
-</section>
+</main>
 
-<!-- ============ APP ============ -->
-<div class="app" id="app" hidden>
-  <header class="bar">
-    <span class="logo-dark sm"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></span>
-    <div class="who"><small>Painel Spinning</small><strong id="ola">Olá</strong></div>
-    <span class="live" id="live"><i></i>Ao vivo</span>
+<!-- PAINEL -->
+<div id="app" hidden>
+  <header class="topo">
+    <div class="logo"><img src="https://americagreco.com.br/assets/logo-FvL6IWpH.webp" alt="América Greco"></div>
+    <button class="link" id="sair">Sair</button>
   </header>
 
-  <nav class="tabs" id="tabs">
-    <button class="on" data-tab="aulas"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Aulas</button>
-    <button data-tab="relatorio"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Relatório</button>
-    <button data-tab="divulgar"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M20 20h.01M17 17h3v3"/></svg>QR Code</button>
-    <button data-tab="conta"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>Conta</button>
-  </nav>
+  <main class="conteudo">
+    <p class="ola" id="ola"></p>
 
-  <!-- ---------- AULAS (lista) ---------- -->
-  <section class="pane" id="pane-aulas">
-    <div class="pane-head">
-      <div><div class="eyebrow">Agenda</div><h2>Aulas</h2></div>
-      <button class="btn btn-gold" id="btnNova">+ Nova aula</button>
-    </div>
-    <div class="seg" id="segAulas">
-      <button class="on" data-f="proximas">Próximas</button>
-      <button data-f="anteriores">Anteriores</button>
-    </div>
-    <div class="alist" id="alist"><div class="empty">Carregando…</div></div>
-  </section>
+    <!-- cadastrar -->
+    <form class="box" id="form">
+      <h2 id="formTitulo">Cadastrar aula</h2>
+      <div class="linha">
+        <label>Dia<input type="date" id="fData" required></label>
+        <label>Horário<input type="time" id="fHora" required></label>
+      </div>
+      <div class="linha">
+        <label>Vagas para alunos<input type="number" id="fAlunos" min="0" max="200" inputmode="numeric" required></label>
+        <label>Vagas para externos<input type="number" id="fExternos" min="0" max="200" inputmode="numeric" required></label>
+      </div>
+      <button class="btn" type="submit" id="fBotao">Cadastrar aula</button>
+      <button class="link" type="button" id="fCancelar" hidden>Cancelar edição</button>
+      <p class="erro" id="fErro"></p>
+    </form>
 
-  <!-- ---------- AULA (detalhe) ---------- -->
-  <section class="pane" id="pane-aula" hidden>
-    <button class="back" id="voltar">‹ Voltar para aulas</button>
-    <div class="det-head">
+    <!-- lista -->
+    <div class="titulo-lista">
+      <h2>Aulas cadastradas</h2>
+      <span class="ao-vivo"><i></i>atualiza sozinho</span>
+    </div>
+    <div id="lista"><p class="vazio">Carregando…</p></div>
+
+    <details class="passadas" id="passadas">
+      <summary>Ver aulas que já passaram</summary>
+      <div id="listaPassadas"></div>
+    </details>
+
+    <!-- divulgar -->
+    <div class="box qr">
+      <img src="/assets/qr-checkin.png" alt="QR Code do check-in">
       <div>
-        <div class="eyebrow" id="dEyebrow"></div>
-        <h2 id="dTitulo"></h2>
-        <p class="det-sub" id="dSub"></p>
-      </div>
-      <div class="det-actions">
-        <button class="btn btn-line sm" id="dEditar">Editar aula</button>
-        <button class="btn btn-line sm" id="dMais" aria-haspopup="true">Mais ▾</button>
-        <div class="menu" id="dMenu" hidden>
-          <button data-a="whats">Copiar lista (WhatsApp)</button>
-          <button data-a="csv">Baixar planilha</button>
-          <button data-a="print">Imprimir lista</button>
-          <button data-a="status" id="mStatus">Cancelar aula</button>
-          <button data-a="excluir" class="danger">Excluir aula</button>
-        </div>
+        <h2>Link para os alunos</h2>
+        <p>americagreco-checkin.vercel.app</p>
+        <a class="btn claro" href="/assets/qr-checkin.png" download="qrcode-spinning.png">Baixar QR Code</a>
+        <a class="btn claro" href="/cartaz" target="_blank" rel="noopener">Cartaz para imprimir</a>
       </div>
     </div>
-
-    <div class="kpis k4" id="dKpis"></div>
-
-    <div class="det-tools">
-      <div class="seg" id="segPessoas">
-        <button class="on" data-f="todos">Todos</button>
-        <button data-f="aluno">Alunos</button>
-        <button data-f="externo">Externos</button>
-      </div>
-      <input class="busca" id="busca" placeholder="Buscar nome ou CPF…">
-      <button class="btn btn-dark sm" id="btnAdd">+ Adicionar pessoa</button>
-    </div>
-    <div class="plist" id="plist"></div>
-  </section>
-
-  <!-- ---------- RELATÓRIO ---------- -->
-  <section class="pane" id="pane-relatorio" hidden>
-    <div class="pane-head"><div><div class="eyebrow">Acompanhamento</div><h2>Relatório</h2></div></div>
-    <div class="seg wrap-seg" id="segPer">
-      <button class="on" data-p="mes">Este mês</button>
-      <button data-p="passado">Mês passado</button>
-      <button data-p="30">Últimos 30 dias</button>
-      <button data-p="custom">Escolher datas</button>
-    </div>
-    <div class="per-custom" id="perCustom" hidden>
-      <input type="date" id="rIni"><span>até</span><input type="date" id="rFim"><button class="btn btn-dark sm" id="rGo">Ver</button>
-    </div>
-    <div class="kpis k4" id="rKpis"></div>
-    <div class="rcards" id="rAulas"></div>
-    <div class="r-actions"><button class="btn btn-line" id="rCsv">Baixar planilha com todas as pessoas</button></div>
-  </section>
-
-  <!-- ---------- DIVULGAR ---------- -->
-  <section class="pane" id="pane-divulgar" hidden>
-    <div class="pane-head"><div><div class="eyebrow">Divulgação</div><h2>QR Code do check-in</h2></div></div>
-    <div class="share">
-      <div class="qr-card">
-        <img src="/assets/qr-checkin.png" alt="QR Code do site de check-in" id="qrImg">
-        <code id="pubLink"></code>
-      </div>
-      <div class="share-actions">
-        <p class="hint">Imprima e deixe na recepção e na sala de spinning, ou mande o link no grupo de alunos. Quem escanear cai direto na página de reserva.</p>
-        <a class="btn btn-dark" href="/assets/qr-checkin.png" download="qrcode-checkin-spinning.png">Baixar QR Code</a>
-        <a class="btn btn-gold" href="/cartaz" target="_blank" rel="noopener">Abrir cartaz para imprimir (A4)</a>
-        <button class="btn btn-line" id="copiar">Copiar link</button>
-        <a class="btn btn-line" id="wa" target="_blank" rel="noopener">Enviar no WhatsApp</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ---------- CONTA ---------- -->
-  <section class="pane" id="pane-conta" hidden>
-    <div class="pane-head"><div><div class="eyebrow">Sua conta</div><h2 id="cNome"></h2></div></div>
-    <div class="cfg-grid">
-      <form class="card" id="fSenha">
-        <h3 class="ct">Trocar senha</h3>
-        <div class="field"><input type="password" id="sAtual" placeholder=" " autocomplete="current-password"><label for="sAtual">Senha atual</label></div>
-        <div class="field"><input type="password" id="sNova" placeholder=" " autocomplete="new-password"><label for="sNova">Nova senha (mín. 6)</label></div>
-        <div class="field"><input type="password" id="sNova2" placeholder=" " autocomplete="new-password"><label for="sNova2">Repita a nova senha</label></div>
-        <button class="btn btn-dark" type="submit">Salvar nova senha</button>
-        <div class="msg" id="sMsg"></div>
-      </form>
-      <div class="card">
-        <h3 class="ct">Como funciona</h3>
-        <ul class="howto">
-          <li><b>Crie as aulas</b> em “+ Nova aula”: dia, horário, vagas para alunos, vagas para externos e valor da diária. Dá para repetir toda semana.</li>
-          <li><b>Só aparecem no site</b> as aulas abertas. Cancelou? Some do site na hora.</li>
-          <li><b>O check-in fecha sozinho</b> quando as vagas acabam ou quando a aula começa.</li>
-          <li><b>Na aula</b>, abra a lista e marque presença e pagamento dos externos.</li>
-        </ul>
-        <button class="btn btn-line" id="sair">Sair do painel</button>
-      </div>
-    </div>
-  </section>
+  </main>
 </div>
 
-<!-- ============ MODAL: aula ============ -->
-<div class="overlay" id="mAula">
-  <form class="card modal" id="fAula" novalidate>
-    <div class="m-head"><h3 class="ct" id="fAulaTit">Nova aula</h3><button type="button" class="x" data-close>×</button></div>
-    <div class="grid2">
-      <div class="field"><input type="date" id="aData" required placeholder=" "><label for="aData">Dia</label></div>
-      <div class="field"><input type="time" id="aHora" required placeholder=" "><label for="aHora">Horário</label></div>
-    </div>
-    <div class="field"><input id="aTitulo" placeholder=" " maxlength="60"><label for="aTitulo">Nome da aula</label></div>
-    <div class="grid3">
-      <div class="field"><input type="number" id="aVA" min="0" max="200" inputmode="numeric" placeholder=" "><label for="aVA">Vagas alunos</label></div>
-      <div class="field"><input type="number" id="aVE" min="0" max="200" inputmode="numeric" placeholder=" "><label for="aVE">Vagas externos</label></div>
-      <div class="field"><input type="number" id="aValor" min="0" step="0.01" inputmode="decimal" placeholder=" "><label for="aValor">Diária (R$)</label></div>
-    </div>
-    <div class="field"><input id="aInstr" placeholder=" " maxlength="60"><label for="aInstr">Instrutor (opcional)</label></div>
-    <div class="field"><input id="aObs" placeholder=" " maxlength="200"><label for="aObs">Observação interna (opcional)</label></div>
-    <div class="repetir" id="aRepWrap">
-      <label class="tgl"><input type="checkbox" id="aRep"> <span>Repetir toda semana</span></label>
-      <div class="rep-n" id="aRepN" hidden>por <input type="number" id="aSem" min="2" max="52" value="4" inputmode="numeric"> semanas <small id="aRepTxt"></small></div>
-    </div>
-    <div class="m-total" id="aTotal"></div>
-    <button class="btn btn-dark" type="submit" id="aSalvar">Criar aula</button>
-    <div class="msg" id="aMsg"></div>
-  </form>
-</div>
-
-<!-- ============ MODAL: pessoa ============ -->
-<div class="overlay" id="mPessoa">
-  <form class="card modal" id="fPessoa" novalidate>
-    <div class="m-head"><h3 class="ct">Adicionar pessoa</h3><button type="button" class="x" data-close>×</button></div>
-    <div class="seg full" id="pTipo">
-      <button type="button" class="on" data-t="aluno">Aluno da academia</button>
-      <button type="button" data-t="externo">Externo (diária)</button>
-    </div>
-    <div class="field"><input id="pNome" placeholder=" " maxlength="120"><label for="pNome">Nome</label></div>
-    <div class="grid2">
-      <div class="field"><input id="pCpf" inputmode="numeric" maxlength="14" placeholder=" "><label for="pCpf">CPF</label></div>
-      <div class="field"><input id="pTel" inputmode="tel" maxlength="15" placeholder=" "><label for="pTel">WhatsApp</label></div>
-    </div>
-    <div id="pPagWrap" hidden>
-      <label class="tgl"><input type="checkbox" id="pPago"> <span>Já pagou a diária</span></label>
-      <div class="seg" id="pForma" hidden>
-        <button type="button" class="on" data-f="Pix">Pix</button><button type="button" data-f="Dinheiro">Dinheiro</button><button type="button" data-f="Cartão">Cartão</button>
-      </div>
-    </div>
-    <button class="btn btn-dark" type="submit">Adicionar à aula</button>
-    <div class="msg" id="pMsg"></div>
-  </form>
-</div>
-
-<!-- ============ MENU: pagamento ============ -->
-<div class="pay-menu" id="payMenu" hidden>
-  <small>Diária paga com:</small>
-  <button data-f="Pix">Pix</button><button data-f="Dinheiro">Dinheiro</button><button data-f="Cartão">Cartão</button>
-  <button data-f="__desfazer" class="undo">Marcar como não pago</button>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<!-- área de impressão -->
-<div id="printArea"></div>
+<div class="aviso" id="aviso"></div>
 
 <script src="/assets/config.js"></script>
 <script src="/assets/api.js"></script>

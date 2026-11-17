@@ -39,15 +39,13 @@
       b.classList.toggle('low', !!a && l > 0 && l <= 3);
       $(t === 'aluno' ? '#vAluno' : '#vExterno').textContent = !a ? '—' : total === 0 ? 'Sem vagas nesta aula' : l === 0 ? 'Esgotado' : `${l} de ${total} vagas livres`;
     });
-    $('#vPreco').textContent = a ? (Number(a.valor_diaria) > 0 ? U.brl(a.valor_diaria) : 'Gratuito') : '—';
     resumo();
   }
 
   function resumo() {
     const a = st.aula;
     if (!a) { $('#sel').textContent = 'Escolha a aula para continuar'; $('#go').disabled = true; return; }
-    const extra = st.tipo === 'externo' && Number(a.valor_diaria) > 0 ? ` · diária ${U.brl(a.valor_diaria)}` : '';
-    $('#sel').innerHTML = `<b>${a.hora}</b> · ${U.dataLonga(a.data)}${st.tipo ? `<br><span class="t-sel">${st.tipo === 'aluno' ? 'Aluno da academia' : 'Externo'}${extra}</span>` : ''}`;
+    $('#sel').innerHTML = `<b>${a.hora}</b> · ${U.dataLonga(a.data)}${st.tipo ? `<br><span class="t-sel">${st.tipo === 'aluno' ? 'Aluno da academia' : 'Externo'}</span>` : ''}`;
     $('#go').disabled = !st.tipo;
   }
 
@@ -104,11 +102,6 @@
     $('#tkDia').textContent = r.data === U.hoje() ? 'Hoje' : U.dataBR(r.data);
     $('#tkHora').textContent = r.hora;
     $('#tkCode').textContent = r.codigo;
-    const pay = $('#tkPay');
-    if (r.tipo === 'externo' && Number(r.valor) > 0) {
-      pay.innerHTML = `<div><small>Diária</small><span>Pague na recepção antes da aula</span></div><strong>${U.brl(r.valor)}</strong>`;
-      pay.style.display = '';
-    } else pay.style.display = 'none';
     $('#tkNote').textContent = `${r.tipo === 'aluno' ? 'Vaga de aluno' : 'Vaga externa'} · ${r.posicao}º de ${r.vagas}. Mostre este código na recepção e chegue 5 min antes para ajustar a bike.`;
     $('#overlay').classList.add('show'); $('#tkClose').focus();
   }
@@ -126,7 +119,7 @@
       const l = await API.rpc('spin_meus_checkins', { p_cpf: cpf });
       if (!l.length) { box.innerHTML = `<p class="none">Nenhum check-in ativo para este CPF.</p>`; return; }
       box.innerHTML = l.map(c => `<div class="mine-item"><div><strong>${c.hora} · ${c.data === U.hoje() ? 'Hoje' : U.dataBR(c.data)}</strong>
-        <small>${c.codigo} · ${c.tipo === 'aluno' ? 'aluno' : 'externo · ' + U.brl(c.valor)}${c.status === 'presente' ? ' · presença confirmada' : ''}</small></div>
+        <small>${c.codigo} · ${c.tipo === 'aluno' ? 'aluno' : 'externo'}${c.status === 'presente' ? ' · presença confirmada' : ''}</small></div>
         ${c.cancelavel ? `<button type="button" data-id="${c.id}">Cancelar</button>` : ''}</div>`).join('');
     } catch (e) { box.innerHTML = `<p class="none">${U.esc(e.message)}</p>`; }
   }

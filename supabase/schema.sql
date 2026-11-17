@@ -40,7 +40,7 @@ create table public.spin_aulas (
   titulo text not null default 'Aula Spinning',
   vagas_aluno int not null default 12 check (vagas_aluno >= 0),
   vagas_externo int not null default 10 check (vagas_externo >= 0),
-  valor_diaria numeric(10,2) not null default 50 check (valor_diaria >= 0),
+  valor_diaria numeric(10,2) not null default 0 check (valor_diaria >= 0),
   instrutor text,
   obs text,
   status text not null default 'aberta' check (status in ('aberta','cancelada')),
@@ -308,9 +308,6 @@ create or replace function public.spin_admin_aula_excluir(p_token text, p_id big
 language plpgsql security definer set search_path = public as $$
 begin
   perform _spin_sessao(p_token);
-  if exists (select 1 from spin_checkins where aula_id = p_id and status <> 'cancelado') then
-    return json_build_object('ok', false, 'erro', 'Essa aula tem check-ins. Use "Cancelar aula" — o histórico fica guardado.');
-  end if;
   delete from spin_aulas where id = p_id;
   return json_build_object('ok', true);
 end $$;
